@@ -2,16 +2,29 @@ import asyncHandler from "express-async-handler";
 import sql from "mssql";
  
 
+// const config = {
+//   user: 'admin1',
+//   password: 'admin1',
+//   server: "DESKTOP-RREMJUE",
+//   database: "taco_traceabilityy",
+//   options: {
+//     encrypt: false, // Change to true if you're using SSL
+//     trustServerCertificate: false, // Change to true if using self-signed certificates
+//   },
+// };
+
+
 const config = {
-  user: 'admin1',
-  password: 'admin1',
-  server: "DESKTOP-RREMJUE",
-  database: "taco_traceabilityy",
+  user: 'admin2',
+  password: 'reset@123',
+  server: "REP-TRACE",
+  database: "replus_treceability",
   options: {
     encrypt: false, // Change to true if you're using SSL
     trustServerCertificate: false, // Change to true if using self-signed certificates
   },
 };
+
 
 const pool = new sql.ConnectionPool(config);
 
