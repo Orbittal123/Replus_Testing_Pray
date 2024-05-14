@@ -56,6 +56,7 @@ router.post("/countAll" , CountAll);
 //2. pack assembly 
 
 router.post("/getvoltageirdetails",getModuleBarcode); 
+router.get("/getvoltageirdetails",getModuleBarcode); 
 
  
 export default router;
