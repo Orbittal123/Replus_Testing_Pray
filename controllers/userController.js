@@ -360,7 +360,7 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
     const result = await pool
       .request()
       .query(`SELECT TOP (1000) [sr_no], [temp_pack_no], [voltage], [ir], [module_barcode]
-                     FROM [taco_traceabilityy].[dbo].[voltage_ir_details]
+                     FROM [replus_treceability].[dbo].[voltage_ir_details]
                    WHERE module_barcode = '${moduleBarcode}'`);
 
     console.log('SQL Query:', result.query);
