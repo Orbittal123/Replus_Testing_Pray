@@ -344,6 +344,37 @@ export const CountAll = asyncHandler(async (request, response) => {
 //   }
 // });
 
+// export const getModuleBarcode = asyncHandler(async (request, response) => {
+//   try {
+//     const { moduleBarcode } = request.body; // Extract moduleBarcode from request body
+
+//     console.log('Received moduleBarcode:', moduleBarcode);
+
+//     // Check if moduleBarcode is present in the request
+//     if (!moduleBarcode) {
+//       return response.status(400).json({ status: 'error', msg: 'Module barcode is missing in the request body' });
+//     }
+
+//     const pool = await sql.connect(config);
+
+//     const result = await pool
+//       .request()
+//       .query(`SELECT TOP (1000) [sr_no], [voltage_diff], [ir_diff], [module_barcode], [status]
+//                      FROM [replus_treceability].[dbo].[voltage_ir_status_details]
+//                    WHERE module_barcode = '${moduleBarcode}'`);
+
+//     console.log('SQL Query:', result.query);
+//     console.log('Query Result:', result.recordset);
+
+//     response.status(200).json({ status: 'success', msg: 'Records fetched successfully', data: result.recordset });
+//   } catch (error) {
+//     console.error('Error while fetching records:', error);
+//     response.status(500).json({ status: 'error', msg: 'Error while fetching records' });
+//   }
+// });
+
+
+// Handler function using asyncHandler for error handling
 export const getModuleBarcode = asyncHandler(async (request, response) => {
   try {
     const { moduleBarcode } = request.body; // Extract moduleBarcode from request body
@@ -355,18 +386,29 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
       return response.status(400).json({ status: 'error', msg: 'Module barcode is missing in the request body' });
     }
 
+    // Connect to the database
     const pool = await sql.connect(config);
 
-    const result = await pool
-      .request()
+    // Execute SQL query to fetch data
+    const result = await pool.request()
       .query(`SELECT TOP (1000) [sr_no], [voltage_diff], [ir_diff], [module_barcode], [status]
-                     FROM [replus_treceability].[dbo].[voltage_ir_status_details]
-                   WHERE module_barcode = '${moduleBarcode}'`);
+              FROM [replus_treceability].[dbo].[voltage_ir_status_details]
+              WHERE module_barcode = '${moduleBarcode}'`);
+
+    // Parse numeric fields (voltage_diff and ir_diff) to ensure they are numbers
+    const records = result.recordset.map(record => ({
+      sr_no: record.sr_no,
+      voltage_diff: parseFloat(record.voltage_diff),
+      ir_diff: parseFloat(record.ir_diff),
+      module_barcode: record.module_barcode,
+      status: record.status
+    }));
 
     console.log('SQL Query:', result.query);
-    console.log('Query Result:', result.recordset);
+    console.log('Query Result:', records);
 
-    response.status(200).json({ status: 'success', msg: 'Records fetched successfully', data: result.recordset });
+    // Send response with JSON data
+    response.status(200).json({ status: 'success', msg: 'Records fetched successfully', data: records });
   } catch (error) {
     console.error('Error while fetching records:', error);
     response.status(500).json({ status: 'error', msg: 'Error while fetching records' });
