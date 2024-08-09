@@ -436,10 +436,10 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
               WHERE module_barcode = '${moduleBarcode}'`);
 
 
-   if (result.recordset.length === 0) {
-      // If no records are found, send a 404 response
-      return response.status(404).json({ status: '[]', msg: 'No data found for the provided module barcode' });
-    }
+   // if (result.recordset.length === 0) {
+   //    // If no records are found, send a 404 response
+   //    return response.status(404).json({ status: '[]', msg: 'No data found for the provided module barcode' });
+   //  }
 
 
     // Parse numeric fields (voltage_diff and ir_diff) to ensure they are numbers
