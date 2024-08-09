@@ -435,6 +435,13 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
               FROM [replus_treceability].[dbo].[voltage_ir_status_details]
               WHERE module_barcode = '${moduleBarcode}'`);
 
+
+   if (result.recordset.length === 0) {
+      // If no records are found, send a 404 response
+      return response.status(404).json({ status: 'error', msg: 'No data found for the provided module barcode' });
+    }
+
+
     // Parse numeric fields (voltage_diff and ir_diff) to ensure they are numbers
     const records = result.recordset.map(record => ({
       sr_no: record.sr_no,
@@ -447,14 +454,7 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
     // console.log('SQL Query:', result.query);
     console.log('Query Result:', records);
 
-    // Check if records are found
-    // if (records.length == 0) {
-    //   return response.status(404).json({ status: 'error', msg: 'No data found for the provided module barcode' });
-    // }
-
-    if (data == []) {
-      return response.status(404).json({ status: 'error', msg: 'No data found for the provided module barcode' });
-    }
+    
 
     // Send response with JSON data
     response.status(200).json({ status: 'success', msg: 'Records fetched successfully', data: records });
