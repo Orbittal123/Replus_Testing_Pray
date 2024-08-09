@@ -444,7 +444,7 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
       status: record.status
     }));
 
-    console.log('SQL Query:', result.query);
+    // console.log('SQL Query:', result.query);
     console.log('Query Result:', records);
 
     // Check if records are found
