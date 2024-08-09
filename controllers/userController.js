@@ -438,7 +438,7 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
 
    if (result.recordset.length === 0) {
       // If no records are found, send a 404 response
-      return response.status(404).json({ status: '', msg: 'No data found for the provided module barcode' });
+      return response.status(404).json({ status: '[]', msg: 'No data found for the provided module barcode' });
     }
 
 
