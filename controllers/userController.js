@@ -435,6 +435,19 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
               FROM [replus_treceability].[dbo].[voltage_ir_status_details]
               WHERE module_barcode = '${moduleBarcode}'`);
 
+   const gradeResult = await pool.request()
+  .query(`
+    SELECT 
+      Grade
+    FROM 
+      [replus_treceability].[dbo].[cell_sorting_backup]
+    WHERE 
+      ModuleCode = '${moduleBarcode}'
+  `);
+
+
+   const grade = gradeResult.recordset.length > 0 ? gradeResult.recordset[0].Grade : null;
+
 
    if (result.recordset.length === 0) {
       // If no records are found, send a 404 response
@@ -448,7 +461,8 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
       voltage_diff: parseFloat(record.voltage_diff),
       ir_diff: parseFloat(record.ir_diff),
       module_barcode: record.module_barcode,
-      status: record.status
+      status: record.status,
+     Grade: grade 
     }));
 
     // console.log('SQL Query:', result.query);
