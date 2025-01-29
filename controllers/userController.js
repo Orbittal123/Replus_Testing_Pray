@@ -430,8 +430,10 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
     const pool = await sql.connect(config);
 
     // Execute SQL query to fetch data
-    const result = await pool.request()
-      .query(`SELECT TOP (1000) [sr_no], [voltage_diff], [ir_diff], [module_barcode], [status]
+    const result = await pool.request()  
+      .query(`SELECT   [sr_no], [voltage_diff], [ir_diff],[module_barcode],[min_voltage],[max_voltage]
+      ,[min_ir]
+      ,[max_ir],[status] 
               FROM [replus_treceability].[dbo].[voltage_ir_status_details]
               WHERE module_barcode = '${moduleBarcode}'`);
 
@@ -457,13 +459,19 @@ export const getModuleBarcode = asyncHandler(async (request, response) => {
 
     // Parse numeric fields (voltage_diff and ir_diff) to ensure they are numbers
     const records = result.recordset.map(record => ({
-      sr_no: record.sr_no,
-      voltage_diff: parseFloat(record.voltage_diff),
-      ir_diff: parseFloat(record.ir_diff),
-      module_barcode: record.module_barcode,
-      status: record.status,
+     sr_no: record.sr_no,
+     voltage_diff: parseFloat(record.voltage_diff),
+     ir_diff: parseFloat(record.ir_diff),
+     max_voltage: parseFloat(record.max_voltage),
+     min_voltage: parseFloat(record.min_voltage),
+     max_ir: parseFloat(record.max_ir),
+     min_ir: parseFloat(record.min_ir),
+     module_barcode: record.module_barcode,
+     status: record.status,
      Grade: grade 
     }));
+
+ 
 
     // console.log('SQL Query:', result.query);
     console.log('Query Result:', records);
